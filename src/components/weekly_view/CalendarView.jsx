@@ -4,34 +4,35 @@ import AddIcon from "@mui/icons-material/Add";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CalendarTable from "./CalenderTable";
+import AddPeriod from "./AddPeriod";
 
 export default function CalendarView() {
+  const currentDate = new Date();
   const [open, setOpen] = useState(false);
-  const [startDate, setStartDate] = useState(11);
+  const [startDate, setStartDate] = useState(currentDate);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   // These dates should be dynamic based on the current week
-  const currentYear = "2023";
-  const currentMonth = "April";
-  const endDate = startDate + 7;
-
-  // convert month to numerical format
-  const monthNumber =
-    new Date(Date.parse(currentMonth + " 1, 2012")).getMonth() + 1;
-
-  // convert these variables into a Date object
-  const startDateFormat = new Date(
-    `${currentYear}-${monthNumber}-${startDate}`
-  );
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.toLocaleString("default", { month: "long" }); // this will give the month name
+  const endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000); // adds 7 days to startDate
 
   const handleNavigateBefore = () => {
-    setStartDate((prevDate) => prevDate - 1);
+    setStartDate(
+      (prevDate) => new Date(prevDate.getTime() - 24 * 60 * 60 * 1000)
+    ); // subtracts 1 day from startDate
   };
 
   const handleNavigateNext = () => {
-    setStartDate((prevDate) => prevDate + 1);
+    setStartDate(
+      (prevDate) => new Date(prevDate.getTime() + 24 * 60 * 60 * 1000)
+    ); // adds 1 day to startDate
+  };
+
+  const handleTodayClick = () => {
+    setStartDate(new Date()); // sets startDate to today's date
   };
 
   return (
@@ -59,14 +60,21 @@ export default function CalendarView() {
             alignItems: "center",
           }}
         >
-          <Typography variant="h5">{currentMonth}</Typography>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", fontSize: "20px" }}
+          >
+            {currentMonth}
+          </Typography>
           <Typography ml="10px" variant="h6">
-            {startDate} - {endDate}
+            {startDate.getDate()} - {endDate.getDate()}
           </Typography>
           <IconButton onClick={handleNavigateBefore}>
             <NavigateBeforeIcon />
           </IconButton>
-          <Typography variant="h6">Today</Typography>
+          <Button onClick={handleTodayClick}>
+            <Typography variant="h6">Today</Typography>
+          </Button>
           <IconButton onClick={handleNavigateNext}>
             <NavigateNextIcon />
           </IconButton>
@@ -82,10 +90,10 @@ export default function CalendarView() {
         >
           Add Period
         </Button>
-        {/* <AddPeriod open={open} handleClose={handleClose} /> */}
+        <AddPeriod open={open} handleClose={handleClose} />
       </Box>
 
-      <CalendarTable startDate={startDateFormat} />
+      <CalendarTable startDate={startDate} />
     </Box>
   );
 }

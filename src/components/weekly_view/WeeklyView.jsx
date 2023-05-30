@@ -11,7 +11,7 @@ import CalendarView from "./CalendarView";
 import { useState } from "react";
 
 const WeeklyView = () => {
-  const [activeButton, setActiveButton] = useState("");
+  const [activeButton, setActiveButton] = useState("Weekly Planning");
 
   const handleClick = (event) => {
     setActiveButton(event.currentTarget.value);

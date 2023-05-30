@@ -1,32 +1,43 @@
 import {
+  Avatar,
   Dialog,
   DialogTitle,
   DialogContent,
   TextField,
-  TimePicker,
   DialogActions,
   Button,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
   Box,
+  Chip,
 } from "@mui/material";
 import { useState } from "react";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DateRangePicker from "@mui/lab/DateRangePicker";
+import { TimePicker, DatePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
 const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const colorOptions = ["#F8EBF1", "#E9E8FD", "#FFFBDA", "#CFFFF1"];
 
 export default function AddPeriod({ open, handleClose }) {
   const [periodName, setPeriodName] = useState("");
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [repeatOn, setRepeatOn] = useState([]);
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("");
 
-  const handleDaysChange = (event, newDays) => {
-    setRepeatOn(newDays);
+  const handleDaysChange = (day) => {
+    if (repeatOn.includes(day)) {
+      setRepeatOn(repeatOn.filter((d) => d !== day));
+    } else {
+      setRepeatOn([...repeatOn, day]);
+    }
+  };
+
+  const handleColorChange = (color) => {
+    setSelectedColor(color);
   };
 
   return (
@@ -35,6 +46,7 @@ export default function AddPeriod({ open, handleClose }) {
         <DialogTitle>Add Period</DialogTitle>
         <DialogContent>
           <TextField
+            sx={{ mb: 3 }}
             autoFocus
             margin="dense"
             label="Period Name"
@@ -49,6 +61,7 @@ export default function AddPeriod({ open, handleClose }) {
             renderInput={(params) => <TextField {...params} />}
           />
           <TimePicker
+            sx={{ ml: 3 }}
             label="End Time"
             value={endTime}
             onChange={setEndTime}
@@ -56,30 +69,69 @@ export default function AddPeriod({ open, handleClose }) {
           />
           <Box sx={{ my: 2 }}>
             <Typography>Repeat on days:</Typography>
-            <ToggleButtonGroup
-              color="primary"
-              value={repeatOn}
-              onChange={handleDaysChange}
-            >
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               {weekDays.map((day) => (
-                <ToggleButton key={day} value={day}>
-                  {day}
-                </ToggleButton>
+                <Chip
+                  key={day}
+                  label={day}
+                  clickable
+                  color={repeatOn.includes(day) ? "primary" : "default"}
+                  onClick={() => handleDaysChange(day)}
+                  variant="outlined"
+                  sx={{ m: 0.5 }}
+                />
               ))}
-            </ToggleButtonGroup>
+            </Box>
           </Box>
-          <DateRangePicker
-            startText="From"
-            value={dateRange}
-            onChange={(newValue) => setDateRange(newValue)}
-            renderInput={(startProps, endProps) => (
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <TextField {...startProps} />
-                <Box sx={{ mx: 2 }}>-</Box>
-                <TextField {...endProps} />
-              </Box>
-            )}
-          />
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <DatePicker
+              label="Start Date"
+              value={startDate}
+              onChange={setStartDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <Box sx={{ mx: 1, mt: 2 }}>to</Box>
+            <DatePicker
+              label="End Date"
+              value={endDate}
+              onChange={setEndDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </Box>
+          <Box sx={{ my: 2 }}>
+            <Typography>Choose color:</Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              {colorOptions.map((color) => (
+                <Chip
+                  key={color}
+                  clickable
+                  color={selectedColor === color ? "primary" : "default"}
+                  onClick={() => handleColorChange(color)}
+                  variant="outlined"
+                  sx={{
+                    m: 1,
+                    p: 2,
+                    background: color,
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                  }}
+                  avatar={
+                    selectedColor === color ? (
+                      <Avatar
+                        sx={{
+                          p: 2,
+                          background: color,
+                        }}
+                      >
+                        <CheckOutlinedIcon sx={{ color: color }} />
+                      </Avatar>
+                    ) : null
+                  }
+                />
+              ))}
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

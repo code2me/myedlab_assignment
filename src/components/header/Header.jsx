@@ -6,7 +6,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
-import Ivan from "../../assets/header/Ivan.png";
+import Ivan from "../../assets/Ivan.png";
 
 const Header = () => {
   return (
@@ -24,13 +24,13 @@ const Header = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "flex-start",
           }}
         >
           <Typography variant="h5" component="div">
             Educator
           </Typography>
-          <Typography variant="body2" component="span" color="#aaaaaa">
+          <Typography ml='5px' variant="body2" component="span" color="#aaaaaa">
             Arthshala
           </Typography>
         </Box>
@@ -50,7 +50,7 @@ const Header = () => {
           <IconButton size="large">
             <CategoryIcon />
           </IconButton>
-          <Typography variant="body2">Planning</Typography>
+          <Typography variant="h6">Planning</Typography>
         </Box>
         <Box
           sx={{
@@ -63,7 +63,7 @@ const Header = () => {
           <IconButton size="large">
             <EditIcon />
           </IconButton>
-          <Typography variant="body2">Documentation</Typography>
+          <Typography variant="h6">Documentation</Typography>
         </Box>
         <Box
           sx={{
@@ -76,7 +76,7 @@ const Header = () => {
           <IconButton size="large">
             <AssignmentIcon />
           </IconButton>
-          <Typography variant="body2">HouseKeeping</Typography>
+          <Typography variant="h6">HouseKeeping</Typography>
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>

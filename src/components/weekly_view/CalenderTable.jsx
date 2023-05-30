@@ -14,7 +14,7 @@ import { useState } from "react";
 const hours = Array.from(Array(24).keys());
 
 const CalendarView = ({ startDate }) => {
-  console.log(startDate) 
+  //console.log(startDate) 
   const startDateFormat = new Date(startDate);
   const daysOfWeek = Array.from(Array(7).keys()).map((i) =>
     addDays(startDateFormat, i)
